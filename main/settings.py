@@ -42,11 +42,14 @@ INSTALLED_APPS = [
     
     #drf
     'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
     
     # swagger
     'drf_yasg',
 
     #my apps
+    'accounts',
 
 ]
 
