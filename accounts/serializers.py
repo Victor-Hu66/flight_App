@@ -1,6 +1,8 @@
 from rest_framework import serializers, validators
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.hashers import make_password
+from dj_rest_auth.serializers import TokenSerializer
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -45,7 +47,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data.pop("password2")
         
         user = User.objects.create(**validated_data)
-        user.set_password(password)
+        user.password = make_password(password)
         user.save()
         return user
     
@@ -55,3 +57,16 @@ class RegisterSerializer(serializers.ModelSerializer):
             {"password": "Password fields didn't match."})
         return data
     
+    
+class UserTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'first_name', 'last_name')
+    
+class CustomTokenSerializer(TokenSerializer):
+    
+    user = UserTokenSerializer(read_only=True)
+    class Meta(TokenSerializer.Meta):
+        fields = ('key', 'user')
+        
+        
