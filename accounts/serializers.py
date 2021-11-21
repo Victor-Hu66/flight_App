@@ -56,8 +56,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
             {"password": "Password fields didn't match."})
         return data
-    
-    
+   
 class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
